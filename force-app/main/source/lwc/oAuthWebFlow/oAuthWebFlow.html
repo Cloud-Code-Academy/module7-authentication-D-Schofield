@@ -6,24 +6,46 @@
 				onactive={handleTabChange}
 				active-tab-value={activeTab}
 			>
-				<lightning-tab label="Authorize Client" value="step1" class={authorizeClientClass}>
+				<lightning-tab label="1. Authorize Client" value="step1" class={authorizeClientClass}>
 					<!-- Step 1: Authorize Client -->
 					<div class="slds-m-top_medium">
+						<!-- Overview Section -->
+						<div class="slds-box slds-theme_info slds-m-bottom_medium">
+							<h3 class="slds-text-heading_small slds-m-bottom_small">Overview</h3>
+							<p>Initiates OAuth 2.0 Web Server Flow from Source Org to Destination Org's Connected App. Generates authorization URL with optional PKCE security and redirects user to Destination Org for authentication consent.</p>
+						</div>
+
+						<!-- Steps Section -->
+						<div class="slds-box slds-theme_default slds-m-bottom_medium">
+							<h3 class="slds-text-heading_small slds-m-bottom_small">Steps to Take</h3>
+							<ol class="slds-list_ordered">
+								<li><strong>Check "Use PKCE" checkbox</strong> (required for this Connected App)</li>
+								<li><strong>Click "Authorize" button</strong></li>
+							</ol>
+						</div>
+
+						<!-- Expected Results Section -->
+						<div class="slds-box slds-theme_success slds-m-bottom_medium">
+							<h3 class="slds-text-heading_small slds-m-bottom_small">Expected Results</h3>
+							<ul class="slds-list_dotted">
+								<li>Browser redirects to destination org login page</li>
+								<li>You login with your destination org credentials</li>
+								<li>Browser redirects back to your Experience Cloud /callback page</li>
+								<li>Authorization code appears in the URL parameters</li>
+							</ul>
+						</div>
+
 						<div class="slds-grid slds-gutters">
 							<div class="slds-col">
 								<lightning-input
 									type="checkbox"
-									label="Use PKCE (Proof Key for Code Exchange)"
+									label="Use PKCE (Proof Key for Code Exchange) - Required"
 									checked={usePkce}
 									onchange={handleUsePkceChange}
 									class="slds-m-bottom_small"
 								></lightning-input>
 							</div>
 						</div>
-
-						<p class="slds-m-top_small">
-							Click the button below to authorize the client application.
-						</p>
 						<div class="slds-m-top_medium">
 							<lightning-button
 								label="Authorize"
@@ -48,15 +70,38 @@
 				</lightning-tab>
 
 				<lightning-tab
-					label="Exchange Authorization Code"
+					label="2. Exchange Authorization Code"
 					value="step2"
 					class={exchangeAuthCodeClass}
 				>
 					<!-- Step 2: Exchange Authorization Code -->
 					<div class="slds-m-top_medium">
-						<p class="slds-m-top_small">
-							Enter the authorization code received from the OAuth provider.
-						</p>
+						<!-- Overview Section -->
+						<div class="slds-box slds-theme_info slds-m-bottom_medium">
+							<h3 class="slds-text-heading_small slds-m-bottom_small">Overview</h3>
+							<p>Source Org exchanges authorization code with Destination Org's Connected App token endpoint to receive access token and refresh token for authenticated API access.</p>
+						</div>
+
+						<!-- Steps Section -->
+						<div class="slds-box slds-theme_default slds-m-bottom_medium">
+							<h3 class="slds-text-heading_small slds-m-bottom_small">Steps to Take</h3>
+							<ol class="slds-list_ordered">
+								<li><strong>Copy authorization code</strong> from URL after redirect (from Tab 1)</li>
+								<li><strong>Paste into "Authorization Code" field</strong></li>
+								<li><strong>Click "Exchange Code" button</strong></li>
+							</ol>
+						</div>
+
+						<!-- Expected Results Section -->
+						<div class="slds-box slds-theme_success slds-m-bottom_medium">
+							<h3 class="slds-text-heading_small slds-m-bottom_small">Expected Results</h3>
+							<ul class="slds-list_dotted">
+								<li>Success message appears</li>
+								<li>Access token is obtained and stored internally</li>
+								<li>Request/Response details displayed at bottom</li>
+								<li>Ready to proceed to Tab 3</li>
+							</ul>
+						</div>
 						<div class="slds-m-top_medium">
 							<lightning-input
 								label="Authorization Code"
@@ -108,12 +153,33 @@
 					</div>
 				</lightning-tab>
 
-				<lightning-tab label="Fetch Identity" value="step3" class={fetchIdentityClass}>
+				<lightning-tab label="3. Fetch Identity" value="step3" class={fetchIdentityClass}>
 					<!-- Step 3: Fetch Identity -->
 					<div class="slds-m-top_medium">
-						<p class="slds-m-top_small">
-							Click the button below to fetch the user identity.
-						</p>
+						<!-- Overview Section -->
+						<div class="slds-box slds-theme_info slds-m-bottom_medium">
+							<h3 class="slds-text-heading_small slds-m-bottom_small">Overview</h3>
+							<p>Source Org uses acquired access token to make authenticated API call to Destination Org's REST API limits endpoint, validating the OAuth integration works for read operations.</p>
+						</div>
+
+						<!-- Steps Section -->
+						<div class="slds-box slds-theme_default slds-m-bottom_medium">
+							<h3 class="slds-text-heading_small slds-m-bottom_small">Steps to Take</h3>
+							<ol class="slds-list_ordered">
+								<li><strong>Click "Fetch Identity" button</strong></li>
+							</ol>
+						</div>
+
+						<!-- Expected Results Section -->
+						<div class="slds-box slds-theme_success slds-m-bottom_medium">
+							<h3 class="slds-text-heading_small slds-m-bottom_small">Expected Results</h3>
+							<ul class="slds-list_dotted">
+								<li>Access token displays on screen</li>
+								<li>Calls SFExternalCalloutWithToken.getLimits()</li>
+								<li>Shows org limits/info from destination org</li>
+								<li>Proves the token works for API calls</li>
+							</ul>
+						</div>
 						<div class="slds-m-top_medium">
 							<lightning-button
 								label="Fetch Identity"
@@ -150,10 +216,34 @@
 					</div>
 				</lightning-tab>
 
-				<lightning-tab label="Create Account" value="step4" class={successClass}>
+				<lightning-tab label="4. Create Account" value="step4" class={successClass}>
 					<!-- Step 4: Create Account -->
 					<div class="slds-m-top_medium">
-						<p class="slds-m-top_small">Click the button below to create an account.</p>
+						<!-- Overview Section -->
+						<div class="slds-box slds-theme_info slds-m-bottom_medium">
+							<h3 class="slds-text-heading_small slds-m-bottom_small">Overview</h3>
+							<p>Source Org uses authenticated token to create data in Destination Org via REST API, proving end-to-end OAuth integration supports both read and write operations across orgs.</p>
+						</div>
+
+						<!-- Steps Section -->
+						<div class="slds-box slds-theme_default slds-m-bottom_medium">
+							<h3 class="slds-text-heading_small slds-m-bottom_small">Steps to Take</h3>
+							<ol class="slds-list_ordered">
+								<li><strong>Review identity information</strong> displayed</li>
+								<li><strong>Click "Create Account" button</strong></li>
+							</ol>
+						</div>
+
+						<!-- Expected Results Section -->
+						<div class="slds-box slds-theme_success slds-m-bottom_medium">
+							<h3 class="slds-text-heading_small slds-m-bottom_small">Expected Results</h3>
+							<ul class="slds-list_dotted">
+								<li>Calls SFExternalCalloutWithToken.createAccount()</li>
+								<li>Creates new Account record in destination org</li>
+								<li>Displays new Account ID</li>
+								<li>Proves end-to-end OAuth integration works</li>
+							</ul>
+						</div>
 
 						<div if:true={showIdentity} class="slds-m-top_medium">
 							<div class="slds-form-element">
