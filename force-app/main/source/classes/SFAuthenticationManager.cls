@@ -234,9 +234,6 @@ public with sharing class SFAuthenticationManager {
 			// Create JWS (JSON Web Signature) with the JWT
 			// 'jwtsource' should be the name of your certificate in Salesforce
 			Auth.JWS jws = new Auth.JWS(jwt, 'jwtsource');
-
-			// Get the compact serialization (token string)
-			String token = jws.getCompactSerialization();
 			String tokenEndpoint = DEFAULT_LOGIN_URL + TOKEN_ENDPOINT;
 
 			// Create JWTBearerTokenExchange and get access token
